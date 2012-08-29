@@ -24,38 +24,23 @@ You don't like it?<br>
 Give me a break, I'm still learning Chef. <br>
 BODY
 
-file "/tmp/something" do
-  owner "root"
-  group "root"
-  mode "0755"
-  action :create
+user "website" do
+     action :create
+     home "#{homedir}"
+     shell "/bin/bash"
+     supports :manage_home => true
 end
 
-# Create non system user and key
-# along with setting proper homedir/docroot perms
-
-## Begin Cheating Hack!!
-#`useradd -s /bin/bash website`
-## End Cheating Hack!!
-puts "\nabout to add a user, brace yourself\n"
-
-#user "website" do
-#     action :create
-#     home "#{homedir}"
-#     shell "/bin/bash"
-#     supports :manage_home => true
-#end
-
-
-
-FileUtils.chmod 0755, "#{homedir}" 
-
-if File.exists?("#{homedir}/.ssh") && File.directory?("#{homedir}/.ssh")
-  puts ".ssh dir exists, moving on\n"
-else
-  puts ".ssh dir does not exist, lets create it and move on\n"
-  FileUtils.mkdir "#{homedir}/.ssh"
+directory "#{homedir}" do
+    mode "0711"
 end
+
+directory "#{homedir}/.ssh" do
+    owner "website"
+    group "website"
+    mode  "0755"
+    action :create
+    end
 
 if File.exists?(keyoutfile)
   puts "\n **#{keyoutfile} exists, moving on\n"
@@ -77,21 +62,19 @@ input.close()
 
 end
 
-#Setup docroot and Apache vhost
-if File.exists?(docroot) && File.directory?(docroot)
-  puts "\n **docroot: #{docroot} exists, moving on\n"
-else
-  puts "\n **docroot #{docroot} doesn't exist, lets create it, setup the apache conf,  and move on\n"
-  FileUtils.mkdir "#{docroot}"
+directory "#{docroot}" do
+    owner "website"
+    group "website"
+    mode  "0755"
+    action :create
+   end
 
 web_app "mysite" do
      template "mysite.conf.erb"
      server_name "mysite.com"
      server_aliases [ "#{node['domain']}", node['fqdn'] ]
      docroot "#{docroot}"
-   end
-
-FileUtils.chmod 0755, "#{docroot}"
+end
 
 #Create index.html, then write default data to it
 
@@ -102,5 +85,7 @@ target = File.open(index, 'w')
 target.write(content)
 target.close()
 
-`chown -R website:website #{homedir}`
+file "#{docroot}/index.html" do
+    owner "website"
+    group "website"
 end

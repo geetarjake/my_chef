@@ -42,25 +42,29 @@ directory "#{homedir}/.ssh" do
     action :create
     end
 
-if File.exists?(keyoutfile)
-  puts "\n **#{keyoutfile} exists, moving on\n"
-else
-  puts "\n ** #{keyoutfile} doesn't exist, lets create it and move on\n"
-  `ssh-keygen -t rsa -f #{homedir}/.ssh/website_rsa -P \"\"`
-
-FileUtils.touch "#{keyoutfile}"
-
-
-input = File.open(keyinfile)
-indata = input.read()
-
-output = File.open(keyoutfile, 'w')
-output.write(indata)
-
-output.close()
-input.close()
-
+file "#{keyoutfile}" do
+    action :create_if_missing
 end
+
+#if File.exists?(keyoutfile)
+#  puts "\n **#{keyoutfile} exists, moving on\n"
+#else
+#  puts "\n ** #{keyoutfile} doesn't exist, lets create it and move on\n"
+#  `ssh-keygen -t rsa -f #{homedir}/.ssh/website_rsa -P \"\"`
+
+#FileUtils.touch "#{keyoutfile}"
+
+
+#input = File.open(keyinfile)
+#indata = input.read()
+
+#output = File.open(keyoutfile, 'w')
+#output.write(indata)
+
+#output.close()
+#input.close()
+
+#end
 
 directory "#{docroot}" do
     owner "website"
@@ -76,16 +80,10 @@ web_app "mysite" do
      docroot "#{docroot}"
 end
 
-#Create index.html, then write default data to it
-
-FileUtils.touch "#{docroot}/index.html"
-
-
-target = File.open(index, 'w')
-target.write(content)
-target.close()
 
 file "#{docroot}/index.html" do
     owner "website"
     group "website"
+    action :create
+    content "#{content}"
 end

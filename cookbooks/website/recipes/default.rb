@@ -8,7 +8,7 @@
 #
 
 require 'fileutils'
-include_recipe "users"
+#include_recipe "users"
 
 homedir = '/home/website'
 docroot = "#{homedir}/public_html"
@@ -24,6 +24,12 @@ You don't like it?<br>
 Give me a break, I'm still learning Chef. <br>
 BODY
 
+file "/tmp/something" do
+  owner "root"
+  group "root"
+  mode "0755"
+  action :create
+end
 
 # Create non system user and key
 # along with setting proper homedir/docroot perms
@@ -33,12 +39,14 @@ BODY
 ## End Cheating Hack!!
 puts "\nabout to add a user, brace yourself\n"
 
-user "website" do
-     action :create
-     home "#{homedir}"
-     shell "/bin/bash"
-     supports :manage_home=>true
-end
+#user "website" do
+#     action :create
+#     home "#{homedir}"
+#     shell "/bin/bash"
+#     supports :manage_home => true
+#end
+
+
 
 FileUtils.chmod 0755, "#{homedir}" 
 

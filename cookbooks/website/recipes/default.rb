@@ -15,6 +15,8 @@ docroot = "#{homedir}/public_html"
 keyinfile = "#{homedir}/.ssh/website_rsa.pub"
 keyoutfile = "#{homedir}/.ssh/authorized_keys"
 
+website_key = data_bag_item('keys', 'website')
+
 #Variables for index.html, content, etc
 index = "#{docroot}/index.html"
 content = <<BODY
@@ -44,8 +46,11 @@ directory "#{homedir}/.ssh" do
 
 file "#{keyoutfile}" do
     action :create_if_missing
+    content website_key['ssh_keys']
 end
 
+#Begin hack for SSH key
+#
 #if File.exists?(keyoutfile)
 #  puts "\n **#{keyoutfile} exists, moving on\n"
 #else
@@ -65,6 +70,10 @@ end
 #input.close()
 
 #end
+#
+#End hack for SSH key
+
+
 
 directory "#{docroot}" do
     owner "website"
@@ -87,3 +96,4 @@ file "#{docroot}/index.html" do
     action :create
     content "#{content}"
 end
+

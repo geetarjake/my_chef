@@ -26,9 +26,11 @@ content = <<BODY
 <head>
 <title>#{title}</title>
 </head>
+<body>
 Here is the body of my test index.html page.<br>
 You don't like it?<br>
 Give me a break, I'm still learning Chef. <br>
+</body>
 BODY
 
 user "website" do

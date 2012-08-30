@@ -18,35 +18,40 @@ keyoutfile = "#{homedir}/.ssh/authorized_keys"
 website_key = data_bag_item('keys', 'website')
 
 #Variables for index.html, content, etc
+title = node[:website][:title]
+
 index = "#{docroot}/index.html"
 content = <<BODY
 <html>
+<head>
+<title>#{title}</title>
+</head>
 Here is the body of my test index.html page.<br>
 You don't like it?<br>
 Give me a break, I'm still learning Chef. <br>
 BODY
 
 user "website" do
-     action :create
-     home "#{homedir}"
-     shell "/bin/bash"
-     supports :manage_home => true
+  action :create
+  home "#{homedir}"
+  shell "/bin/bash"
+  supports :manage_home => true
 end
 
-directory "#{homedir}" do
-    mode "0711"
+directory homedir do
+  mode "0711"
 end
 
 directory "#{homedir}/.ssh" do
-    owner "website"
-    group "website"
-    mode  "0755"
-    action :create
-    end
+  owner "website"
+  group "website"
+  mode  "0755"
+  action :create
+ end
 
-file "#{keyoutfile}" do
-    action :create_if_missing
-    content website_key['ssh_keys']
+file keyoutfile do
+  action :create_if_missing
+  content website_key['ssh_keys']
 end
 
 #Begin hack for SSH key
@@ -75,25 +80,25 @@ end
 
 
 
-directory "#{docroot}" do
-    owner "website"
-    group "website"
-    mode  "0755"
-    action :create
-   end
+directory docroot do
+  owner "website"
+  group "website"
+  mode  "0755"
+  action :create
+end
 
 web_app "mysite" do
-     template "mysite.conf.erb"
-     server_name "mysite.com"
-     server_aliases [ "#{node['domain']}", node['fqdn'] ]
-     docroot "#{docroot}"
+  template "mysite.conf.erb"
+  server_name "mysite.com"
+  server_aliases [ "#{node['domain']}", node['fqdn'] ]
+  docroot docroot
 end
-
 
 file "#{docroot}/index.html" do
-    owner "website"
-    group "website"
-    action :create
-    content "#{content}"
+  owner "website"
+  group "website"
+  action :create
+  content content
 end
+
 

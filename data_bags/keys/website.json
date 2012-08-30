@@ -1,0 +1,6 @@
+{
+  "id": "website",
+  "ssh_keys": "ssh-dss AAAAB3NzaC1kc3MAAACBAK0u03UDCSiyawYtLn71QOcTXZrqrLFLv8Av3VGYszG+3iCnD0PCLpcDBpZK9B0H5QbvyO7U12cqWszKKth0ah6sxJ60flwbRcNyDPHBp9ru1I1zoC7FqVXPICWpaOlXp8RzqjsvJvQ2NKIoDPBYot+0DrgK/m/dmaMVo4Hpnzr9AAAAFQCKsEKrrjmopz8jpX1SnWf/PJsw8wAAAIBHVnotzr7UKOAfNuXJNeE05DpdtpG1c55eJbGdKs2MtE6zeEm4UIdMqb3660MPv3gJBYxpTYIiLNuBjfptEgvIVEagXLx9ew0YhTkXYGBkm4HB3dPdUWkfMIH7Pe4tNGhWnw2B5V+GijBUiylqxnG1JgU4VfnJdO4w88t6emGlNQAAAIAR1tBxXM7KZz0Fs/ZMEUT1rDjQ/AztqfZddj5N0bKcSelggcYWXNLqdaxf4tgGfAmu9JWWNzAw6j1T+vIfFkrM7vdQ7LC2NfCmyC+Y9RghvUzenkA1qlz4i8dQboN/5C4AqDgW9cv2zrj4DaFImSqrRDTzmYOcdduIAqpazxbhPA== jgreen@core.accountsupportgroup.com",
+  "groups": [ "website" ],
+  "shell": "\/bin\/bash"
+}

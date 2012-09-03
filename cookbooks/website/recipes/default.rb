@@ -18,7 +18,7 @@ keyoutfile = "#{homedir}/.ssh/authorized_keys"
 website_key = data_bag_item('keys', 'website')
 
 #Variables for index.html, content, etc
-title = node[:website][:title]
+title = node[:title]
 
 index = "#{docroot}/index.html"
 content = <<BODY

@@ -1,6 +1,8 @@
 {
   "default_attributes": {
-   "title": "NewTitle"
+   "website": {
+    "title": "NewTitle"
+    }
   },
   "override_attributes": {
   },

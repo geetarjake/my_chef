@@ -96,11 +96,16 @@ web_app "mysite" do
   docroot docroot
 end
 
-file "#{docroot}/index.html" do
-  owner "website"
-  group "website"
-  action :create
-  content content
+kernel_mods = Hash.new
+
+node[:kernel][:modules].each_key do |mod|
+kernel_mods[mod] = mod
 end
 
-
+template "#{docroot}/index.html" do
+  source "index.html.erb"
+  mode 0644
+  owner "website"
+  group "website"
+  variables :mods => kernel_mods
+end

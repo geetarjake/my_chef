@@ -1,0 +1,15 @@
+<html>
+<head>
+<title><%= node[:website][:title] %></title>
+</head>
+<body>
+Here is the body of my test index.html page.<br>
+Let's begin with some stats about this server:<br>
+<br>
+* CPU core count: <%= node[:cpu][:total] %><br>
+* Server uptime(as of last chef run): <%= node[:uptime] %><br>
+* Loaded Kernel Modules:<ul> <% @mods.each do |km| -%>
+<li> <%= km%>
+<% end -%>
+</ul>
+</body>

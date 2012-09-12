@@ -2,6 +2,9 @@
   "default_attributes": {
    "website": {
     "title": "NewTitle"
+    },
+   "users": {
+    "secretpath": "/etc/chef/encrypted_data_bag_users_secret" 
     }
   },
   "override_attributes": {

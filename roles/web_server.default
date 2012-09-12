@@ -1,0 +1,21 @@
+{
+  "default_attributes": {
+  },
+  "override_attributes": {
+  },
+  "json_class": "Chef::Role",
+  "name": "web_server",
+  "env_run_lists": {
+  },
+  "run_list": [
+    "recipe[ntp]",
+    "recipe[openssl]",
+    "recipe[apache2]",
+    "recipe[apache2::mod_ssl]",
+    "recipe[mysql::server]",
+    "recipe[mysql::client]",
+    "recipe[website]"
+  ],
+  "chef_type": "role",
+  "description": ""
+}

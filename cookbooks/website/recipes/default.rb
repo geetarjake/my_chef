@@ -7,32 +7,25 @@
 # All rights reserved - Do Not Redistribute
 #
 
-require 'fileutils'
-#include_recipe "users"
+# install Ruby-Shadow, for password support in user resource
+package "ruby-shadow" do
+  action :install
+end
 
+#set some variabls to keep things tidy
 homedir = '/home/website'
 docroot = "#{homedir}/public_html"
 keyinfile = "#{homedir}/.ssh/website_rsa.pub"
 keyoutfile = "#{homedir}/.ssh/authorized_keys"
 
+
 website_key = data_bag_item('keys', 'website')
 
-#Variables for index.html, content, etc
-title = node[:website][:title]
+title = node['website']['title']
 
 index = "#{docroot}/index.html"
-content = <<BODY
-<html>
-<head>
-<title>#{title}</title>
-</head>
-<body>
-Here is the body of my test index.html page.<br>
-You don't like it?<br>
-Give me a break, I'm still learning Chef. <br>
-</body>
-BODY
 
+# start using resources
 user "website" do
   action :create
   home "#{homedir}"
@@ -56,32 +49,6 @@ file keyoutfile do
   content website_key['ssh_keys']
 end
 
-#Begin hack for SSH key
-#
-#if File.exists?(keyoutfile)
-#  puts "\n **#{keyoutfile} exists, moving on\n"
-#else
-#  puts "\n ** #{keyoutfile} doesn't exist, lets create it and move on\n"
-#  `ssh-keygen -t rsa -f #{homedir}/.ssh/website_rsa -P \"\"`
-
-#FileUtils.touch "#{keyoutfile}"
-
-
-#input = File.open(keyinfile)
-#indata = input.read()
-
-#output = File.open(keyoutfile, 'w')
-#output.write(indata)
-
-#output.close()
-#input.close()
-
-#end
-#
-#End hack for SSH key
-
-
-
 directory docroot do
   owner "website"
   group "website"
@@ -96,16 +63,21 @@ web_app "mysite" do
   docroot docroot
 end
 
-kernel_mods = Hash.new
-
-node[:kernel][:modules].each_key do |mod|
-kernel_mods[mod] = mod
-end
-
 template "#{docroot}/index.html" do
   source "index.html.erb"
   mode 0644
   owner "website"
   group "website"
-  variables :mods => kernel_mods
 end
+
+#loop to create users based on the encrypted data bag "users"
+node['userlist'].each_key do |u|
+
+ users_data = Chef::EncryptedDataBagItem.load("users",u)
+
+  user u do
+    shell users_data["shell"]
+    password users_data["pass"]
+  end
+end
+

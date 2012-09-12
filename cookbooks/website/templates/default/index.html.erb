@@ -8,7 +8,7 @@ Let's begin with some stats about this server:<br>
 <br>
 * CPU core count: <%= node[:cpu][:total] %><br>
 * Server uptime(as of last chef run): <%= node[:uptime] %><br>
-* Loaded Kernel Modules:<ul> <% @mods.each do |km| -%>
+* Loaded Kernel Modules:<ul> <% node['kernel']['modules'].keys.each do |km| -%>
 <li> <%= km%>
 <% end -%>
 </ul>

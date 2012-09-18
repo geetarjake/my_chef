@@ -80,4 +80,3 @@ node['userlist'].each_key do |u|
     password users_data["pass"]
   end
 end
-
